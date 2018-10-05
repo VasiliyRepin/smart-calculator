@@ -1,77 +1,125 @@
 class SmartCalculator {
     constructor(initialValue) {
+        // your implementation
         this.value = initialValue;
-        this.operations = [];
-    }
-    get result() {
-        let rpn = [this.value];
-        let ops = [];
+        this.arr = [this.value];
+        //console.log(this.arr);
 
-        this.operations.forEach(op => {
-            while (ops.length && (ops[ops.length - 1]).priority < op.priority) {
-            rpn.push(ops.pop().op);
-        }
-        ops.push(op);
-        rpn.push(op.val);
-    });
-        while (ops.length) {
-            rpn.push(ops.pop().op)
-        }
-        let res = [];
-        rpn.forEach(token => {
-            if (typeof token === 'function') {
-            res.push(token(res.pop(), res.pop()));
-        } else {
-            res.push(token);
-        }
-    });
-        return res.pop();
     }
-    add(val) {
-        this.operations.push({
-            op: (a, b) => a + b,
-            priority: 3,
-            val: val
-    });
-        return this;
-    }
-    subtract(val) {
-        this.operations.push({
-            op: (a, b) => b - a,
-            priority: 3,
-            val: val
-    })
-        return this;
-    }
-    multiply(val) {
-        this.operations.push({
-            op: (a, b) => a * b,
-            priority: 2,
-            val: val
-    })
-        return this;
-    }
-    devide(val) {
-        this.operations.push({
-            op: (a, b) => b / a,
-            priority: 2,
-            val: val
-    })
-        return this;
-    }
-    pow(val) {
 
-        this.operations.push({
-            op: (b, a) => (Math.pow(a, b)),
-            priority: 1,
-            val: val
-    })
-          return this;
+
+    add(number) {
+        // your implementation
+        this.arr.push('+', number);
+        return this;
+
     }
+
+    subtract(number) {
+        // your implementation
+        this.arr.push('-', number);
+        return this;
+    }
+
+    multiply(number) {
+        // your implementation
+        this.arr.push('*', number);
+        return this;
+    }
+
+    devide(number) {
+        // your implementation
+        this.arr.push('/', number);
+        return this;
+    }
+
+    pow(number) {
+        // your implementation
+        this.arr.push('^', number);
+        return this;
+    }
+
     valueOf() {
-        return this.result;
+        return this.calculate();
+    }
+
+
+
+    calculate(){
+        //console.log(this.arr);
+        //This is Power
+        var temp = 0; var i = this.arr.length-2;
+        while (i >=0 )
+        {
+            if (this.arr[i+1]==='^')
+            {
+                temp = Math.pow(this.arr[i], this.arr[i+2]);
+                this.arr.splice(i, 3, temp);
+                i--;
+            }
+            i--;
+        }
+        //This is Multiplication
+        var i=0;
+        while (i<this.arr.length)
+        {
+            if (this.arr[i+1]==='*')
+            {
+                temp = this.arr[i]*this.arr[i+2];
+                this.arr.splice(i, 3, temp);
+                i--;
+            }
+            i++;
+        }
+
+        //This is division
+        var i =0;
+        while (i<this.arr.length)
+        {
+            if (this.arr[i+1]==="/")
+            {
+                temp = this.arr[i]/this.arr[i+2];
+                this.arr.splice(i, 3, temp);
+                i--;
+            }
+            i++;
+        }
+
+        //Subtraction
+        var i=0;
+        while (i<this.arr.length)
+        {
+            if (this.arr[i+1]==='-')
+            {
+                temp = this.arr[i]-this.arr[i+2];
+                this.arr.splice(i, 3, temp);
+                i--;
+            }
+            i++;
+        }
+
+        //Addition
+        var i=0;
+        while (i<this.arr.length)
+        {
+            if (this.arr[i+1]==='+')
+            {
+                temp = this.arr[i]+this.arr[i+2];
+                this.arr.splice(i, 3, temp);
+                i--;
+            }
+            i++;
+        }
+        console.log(this.arr);
+
+        return this.arr[0];
+
+
+
+
+
+
     }
 }
-
 
 module.exports = SmartCalculator;
